@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="It's a neighborhood map">
+    <meta name="Altynay I." content="It's my neighborhood map">
+    <title>Neighborhood Map: Altynay</title>
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <script src="js/jquery-3.1.0.min.js"></script>
+    <script src="js/knockout-3.4.0.js"></script>
+    <script src="js/main.js"></script>
+  </head>
+
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-xs-4 col-md-4" id="sidebar">
+          <div>
+            <h2>Neighborhood Map</h2>
+          </div>
+
+          <form class="form-horizontal">
+            <div class="form-group">
+              <label for="addressInp" class="sr-only"">Location: </label>
+              <input type="text" class="form-control" id="addressInp" placeholder="Station address" data-bind="value: searchLoc"></input>
+            </div>
+          </form>
+
+          <div class="content">
+            <ul id="locations" class="nav nav-pills nav-stacked">
+              <li role="presentation">Location1</li>
+              <li role="presentation">Location2</li>
+              <li role="presentation">Location3</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-xs-8 col-md-8">
+          <div class="row">
+            <div class="navbar-header">
+              <div class="row">
+                <nav class="nav navbar-inverse" id="navbar">
+                  <button type="button" class="btn btn-default navbar-btn">Button!</button>
+                </nav>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div id="map">
+              <p> Your map </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+
+</html>
