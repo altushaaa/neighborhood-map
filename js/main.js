@@ -1,3 +1,26 @@
+var locations =[
+  {title: "Park Ave", location: {lat: 40, lng: -70}};
+  {title: "Park Ave", location: {lat: 40, lng: -70}};
+  {title: "Park Ave", location: {lat: 40, lng: -70}};
+  {title: "Park Ave", location: {lat: 40, lng: -70}};
+  {title: "Park Ave", location: {lat: 40, lng: -70}};
+]
+
+var tribeca = {lat: 40.719526, lng: -74.0089934};
+var marker = new google.maps.Marker({
+  position: tribeca,
+  map: map,
+  title: "First Marker - Tribeca"
+});
+var infowindow = new google.maps.InfoWindow ({
+  content: "This is the InfoWindow" +
+      "Let's get started"
+});
+marker.addListener('click', function() {
+  infowindow.open(map,marker);
+});
+
+
 $(".form-horizontal").submit(loadData);
 
 function loadData (){
