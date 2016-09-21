@@ -57,35 +57,33 @@ var locations = [
 
 var LocModel = function(data) {
   this.title = data.title;
-  this.map = data.map;
   this.position = data.position;
 };
 
 /* ======= Octopus ======= */
+
 var ViewModel = function() {
-  var self = this;
-  this.myLocs = ko.observableArray([]);
-  locations.forEach(function(locItem){
-    self.myLocs.push(new LocModel(locItem));
-  });
-};
 
-ko.applyBindings(new ViewModel());
-
-// make it go!
-//ViewModel.init();
-
-var map;
-var markers = [];
-function initMap() {
+  var map;
   //Constructor creates a new map - center at Astana, Kazakhstan and zoom at 13
   map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: 51.1283, lng: 71.4305},
     zoom: 13
   });
-  var marker = new google.maps.Marker({
-    position: {lat: 51.1283, lng: 71.4305},
-    map: map,
-    title: "AAA"
+
+  var self = this;
+  this.myLocs = ko.observableArray([]);
+  locations.forEach(function(locItem){
+    self.myLocs.push(new LocModel(locItem));
+    var marker = new google.maps.Marker({
+      position: locItem.position,
+      map: map,
+      title: locItem.title,
+      animation: google.maps.Animation.DROP
+    });
   });
-}
+};
+
+ko.applyBindings(new ViewModel());
+// make it go!
+//ViewModel.init();
