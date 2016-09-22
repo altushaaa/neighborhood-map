@@ -161,13 +161,6 @@ var ViewModel = function() {
   this.sidebar = function(){
     $('#sidebar').toggle();
   }
-  // Expand map area when sidebar is hidden
-  self.mapAreaClass = ko.observable();
-  if ($('#sidebar').is(':visible')) {
-    self.mapAreaClass = "col-xs-9 col-md-9";
-  } else {
-    self.mapAreaClass = "col-xs-12 col-md-12";
-  }
 
   // Filter the list and markers based on the text inputted by the user into the input form upon button click
   // If user submitted empty, the Filter button will clear the filter and display all list items and markers ("else" statement)
