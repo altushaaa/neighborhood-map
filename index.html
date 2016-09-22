@@ -26,21 +26,26 @@
           </form>
 
           <ul data-bind="foreach: myLocs" class="nav-pills nav-stacked">
-            <li data-bind="text: title, visible: Disp"></li>
+            <li data-bind="text: title, visible: Disp, event: {click: $parent.dispInfo, mouseout: $parent.hideInfo}"></li>
           </ul>
 
         </div>
 
-        <div class="col-xs-9 col-md-9">
+        <div id="mapArea" data-bind="style: mapAreaClass">
 
           <div class="row">
             <nav class="nav navbar-inverse">
-              <button type="button" class="btn navbar-btn">Hide Sidebar!</button>
+              <button type="button" class="btn navbar-btn" data-bind="click: sidebar">Hide/Display Sidebar!</button>
             </nav>
           </div>
 
           <div class="row" id="map">
-            <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCK0Y9sEPd8_juTZM-i3xWF_X8jletS_28&v=3">
+            <script>
+              function googleSuccess() {
+                  /* Probably not the best place, but it works! */
+              }
+            </script>
+            <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCK0Y9sEPd8_juTZM-i3xWF_X8jletS_28&v=3%26callback=googleSuccess">
             </script>
           </div>
 

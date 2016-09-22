@@ -20,7 +20,7 @@ img { border: 0; max-width: 100%; }
 
 #map {
   min-width: 100%;
-  min-height: calc(100vh - 49.3333px);
+  min-height: calc(100vh - 60px);
 }
 
 li {
