@@ -187,42 +187,17 @@ var ViewModel = function() {
 
     if (!data) {
         return self.myLocs();
-        console.log(!data);
     } else {
-//        self.myLocs().marker.setVisible(false);
         return ko.utils.arrayFilter(self.myLocs(), function(myLoc) {
           var title = myLoc.title.toLowerCase();
-          //myLoc.marker.setVisible(false);
+          var status = title.indexOf(data) !== -1; //returns "true" if the inputText is not a part of list item title 
+          myLoc.marker.setVisible(status);
           return title.indexOf(data) !== -1;
-          return marker.visible(false);
-
+          //syncing markers visibility with the filtered observableArray
+          //(advice from https://discussions.udacity.com/t/trouble-filtering-list-view-and-map-markers/168145/14)
         });
-        console.log(self.myLocs());
     }
   });
-
-  // Filter the list and markers based on the text inputted by the user into the input form upon button click
-  // If user submitted empty, the Filter button will clear the filter and display all list items and markers ("else" statement)
-  // this.filter = function() {
-  //   var data = document.getElementById('input').value; //used "AsT" to test
-  //   console.log(data);
-  //   for (i=0; i<self.myLocs().length; i++) {
-  //     //if the lookup value is not a part of the list item name, hide the list item and it's marker
-  //     if (!self.myLocs()[i].title.toLowerCase().includes(data.toLowerCase())) {
-  //       self.myLocs()[i].Disp = false;
-  //       //console.log(self.myLocs()[i]);
-  //       markers[i].setVisible(false);
-  //     } else { //otherwise display them
-  //       self.myLocs()[i].Disp = true;
-  //       //console.log(self.myLocs()[i]);
-  //       markers[i].setVisible(true);
-  //     }
-  //   }
-    // TO DO: find out why self.myLocs() is not updating the locations list
-    // 1. it works as intended outside the filter function ---> so could it be scope problem?
-    // 2. doesn't seem like there is a problem with the scope as filter was tied in self
-    // 3. this.myLocs() just does not seem to update automatically (binding not working properly?)
-  //}
 };
 
 ko.applyBindings(new ViewModel());
