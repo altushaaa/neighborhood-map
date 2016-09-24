@@ -91,19 +91,22 @@ var LocModel = function(data) {
 /* ======= Octopus/ViewModel ======= */
 
 var ViewModel = function() {
-
   var self = this;
+
+  //Setting up GoogleMap
   var map;
-  var NYTurl = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
 
-  //Constructor creates a new map - center at Astana, Kazakhstan and zoom at 13
-  map = new google.maps.Map(document.getElementById('map'), {
-    center: {lat: 51.1200, lng: 71.4305},
-    zoom: 13
-  });
+  initMap = function () {
+    var mapElem = document.getElementById('map');
+    var mapOps = {
+      center: {lat: 51.1200, lng: 71.4305},
+      zoom: 13
+    };
+    map = new google.maps.Map(mapElem, mapOps);
+  }
 
-  //Initial display of locations list and markers on the #map and creation of infowindows with NYT API
-  var infowindows = [];
+  initMap();
+
   this.myLocs = ko.observableArray([]);
 
   locations.forEach(function(locItem){
@@ -125,9 +128,9 @@ var ViewModel = function() {
       //populate the myLocs() observableArray
       self.myLocs().push(new LocModel(locItem));
 
-
     // NYTimes API for each list item to be displayed in the infowindow
     // As a base used the code built by LucyBot. www.lucybot.com provided in the NYT API documentation
+    var NYTurl = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
     NYTurl += '?' + $.param({
       'api-key': "1a91a51531bf4df3a90a2b446d8ee0b6",
       'q': locItem.title
@@ -166,7 +169,6 @@ var ViewModel = function() {
 
   //Open infowindow when the list item is clicked and close when user moves the cursor away
   this.dispInfo = function() {
-    console.log(this);
     this.infowindow.open(map,this.marker);
   }
   this.hideInfo = function() {
@@ -190,11 +192,11 @@ var ViewModel = function() {
     } else {
         return ko.utils.arrayFilter(self.myLocs(), function(myLoc) {
           var title = myLoc.title.toLowerCase();
+          //syncing markers visibility with the filtered observableArray
+          //(advice from https://discussions.udacity.com/t/trouble-filtering-list-view-and-map-markers/168145/14)
           var status = title.indexOf(data) !== -1; //returns "true" if the inputText is not a part of list item title
           myLoc.marker.setVisible(status);
           return title.indexOf(data) !== -1;
-          //syncing markers visibility with the filtered observableArray
-          //(advice from https://discussions.udacity.com/t/trouble-filtering-list-view-and-map-markers/168145/14)
         });
     }
   });
