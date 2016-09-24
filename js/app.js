@@ -88,10 +88,10 @@ var LocModel = function(data) {
   this.infowindow = data.infowindow;
 };
 
-/* ======= Octopus/ViewModel ======= */
-
 var ViewModel = function() {
   var self = this;
+
+  /* ======= Octopus/ViewModel ======= */
 
   //Setting up GoogleMap
   var map;

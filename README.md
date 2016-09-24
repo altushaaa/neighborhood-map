@@ -14,10 +14,8 @@ This app was created for Udacity Neighborhood Map Project. It allows people to s
 * Cannot load GoogleMaps API async - keep getting this error: "app.js:105 Uncaught ReferenceError: google is not defined":
 
 ```html
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCK0Y9sEPd8_juTZM-i3xWF_X8jletS_28&v=3&callback=initMap"></script>
 <script src="js/app.js"></script>
-<!---NEED HELP: Placing it here instead and making it async does not work--->
-<!---script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCK0Y9sEPd8_juTZM-i3xWF_X8jletS_28&v=3&callback=initMap"></script--->
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCK0Y9sEPd8_juTZM-i3xWF_X8jletS_28&v=3&callback=initMap"></script>
 ```
 
 ```js
