@@ -172,7 +172,7 @@ function loadApp() {
 
     // Hide/display sidebar when button clicked through toggling display property
     this.sidebar = function(){
-      $('#sidebar').toggle();
+      $('#sidebar-wrapper').toggle();
     }
 
     // Filter the list and markers based on the text inputted by the user into the input form
