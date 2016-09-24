@@ -3,78 +3,92 @@
 var locations = [
     {
         title : 'Baiterek Tower',
-        Disp: true,
-        position : {lat: 51.1283, lng: 71.4305}
+        position : {lat: 51.1283, lng: 71.4305},
+        marker: {},
+        infowindow: {}
     },
     {
         title : 'Palace of Peace and Reconciliation',
-        Disp: true,
-        position : {lat: 51.123135, lng: 71.463532}
+        position : {lat: 51.123135, lng: 71.463532},
+        marker: {},
+        infowindow: {}
     },
     {
         title : 'Ak-Orda Presidential Palace',
-        Disp: true,
-        position : {lat: 51.125836, lng: 71.446325}
+        position : {lat: 51.125836, lng: 71.446325},
+        marker: {},
+        infowindow: {}
     },
     {
         title : 'Rixos President Hotel Astana',
-        Disp: true,
-        position : {lat: 51.133501, lng: 71.421223}
+        position : {lat: 51.133501, lng: 71.421223},
+        marker: {},
+        infowindow: {}
     },
     {
-        title : 'Khan Shatyr Entertainment Center',
-        Disp: true,
-        position : {lat: 51.132539, lng: 71.403822}
+        title : 'Khan Shatyr Shopping & Entertainment Center',
+        position : {lat: 51.132539, lng: 71.403822},
+        marker: {},
+        infowindow: {}
     },
     {
         title : 'Astana Expo 2017',
-        Disp: true,
-        position : {lat: 51.08922, lng: 71.415963}
+        position : {lat: 51.08922, lng: 71.415963},
+        marker: {},
+        infowindow: {}
     },
     {
         title : 'Astana Opera',
-        Disp: true,
-        position : {lat: 51.135319, lng: 71.41065}
+        position : {lat: 51.135319, lng: 71.41065},
+        marker: {},
+        infowindow: {}
     },
     {
         title : 'Astana Marriott Hotel',
-        Disp: true,
-        position : {lat:  51.128741, lng: 71.407373}
+        position : {lat:  51.128741, lng: 71.407373},
+        marker: {},
+        infowindow: {}
     },
     {
         title : 'Nazarbayev University',
-        Disp: true,
-        position : {lat: 51.09053, lng: 71.398165}
+        position : {lat: 51.09053, lng: 71.398165},
+        marker: {},
+        infowindow: {}
     },
     {
-        title : 'Mega Astana Entertainment Center',
-        Disp: true,
-        position : {lat: 51.145503, lng: 71.413648}
+        title : 'Mega Astana Shopping & Entertainment Center',
+        position : {lat: 51.145503, lng: 71.413648},
+        marker: {},
+        infowindow: {}
     },
     {
         title : 'Duman Aquarium and Entertainment Center',
-        Disp: true,
-        position : {lat: 51.1469, lng: 71.4149}
+        position : {lat: 51.1469, lng: 71.4149},
+        marker: {},
+        infowindow: {}
     },
     {
         title : 'Hazret Sultan Mosque',
-        Disp: true,
-        position : {lat: 51.125488, lng: 71.471935}
+        position : {lat: 51.125488, lng: 71.471935},
+        marker: {},
+        infowindow: {}
     },
     {
         title : 'Astana Arena Stadium',
-        Disp: true,
-        position : {lat: 51.108224, lng: 71.402636}
+        position : {lat: 51.108224, lng: 71.402636},
+        marker: {},
+        infowindow: {}
     }
 ];
 
 var LocModel = function(data) {
   this.title = data.title;
-  this.Disp = data.Disp;
   this.position = data.position;
+  this.marker = data.marker;
+  this.infowindow = data.infowindow;
 };
 
-/* ======= Octopus ======= */
+/* ======= Octopus/ViewModel ======= */
 
 var ViewModel = function() {
 
@@ -89,11 +103,11 @@ var ViewModel = function() {
   });
 
   //Initial display of locations list and markers on the #map and creation of infowindows with NYT API
-  var markers =[];
   var infowindows = [];
   this.myLocs = ko.observableArray([]);
+
   locations.forEach(function(locItem){
-    self.myLocs().push(new LocModel(locItem));
+    //create marker for each list item
     var marker = new google.maps.Marker({
       position: locItem.position,
       map: map,
@@ -101,9 +115,16 @@ var ViewModel = function() {
       animation: google.maps.Animation.DROP,
       icon: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'
       });
+      locItem.marker = marker;
 
-    var infowindow = new google.maps.InfoWindow ({
-    });
+      //create infowindows
+      var infowindow = new google.maps.InfoWindow ({
+      });
+      locItem.infowindow = infowindow;
+
+      //populate the myLocs() observableArray
+      self.myLocs().push(new LocModel(locItem));
+
 
     // NYTimes API for each list item to be displayed in the infowindow
     // As a base used the code built by LucyBot. www.lucybot.com provided in the NYT API documentation
@@ -118,7 +139,7 @@ var ViewModel = function() {
       //console.log(locItem.title);
       //handle the error when NYTimes Article Search does not return a result by notifying the user in the infowindow
       if (result.response.docs[0] == undefined) {
-        apiStr = '<h3>' + locItem.title + '</h3>' + '<p> No NYTimes API loaded.</p>';
+        apiStr = '<h3>' + locItem.title + '</h3>' + '<p> No NYTimes article could be loaded this time.</p>';
       } else {
         apiStr = '<h3>' + locItem.title + '</h3>' + '<p>' + result.response.docs[0].lead_paragraph + '</p>' +
        '<p> Attribution: NYTimes <a href="' + result.response.docs[0].web_url + '">'+
@@ -140,21 +161,16 @@ var ViewModel = function() {
         infowindow.close();
         marker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png');
     });
-    markers.push(marker);
-    infowindows.push(infowindow);
   });
   console.log(self.myLocs());
-  console.log(markers);
-  console.log(infowindows);
 
   //Open infowindow when the list item is clicked and close when user moves the cursor away
   this.dispInfo = function() {
-      var i = self.myLocs().indexOf(this);
-      infowindows[i].open(map,markers[i]);
+    console.log(this);
+    this.infowindow.open(map,this.marker);
   }
   this.hideInfo = function() {
-      var i = self.myLocs().indexOf(this);
-      infowindows[i].close();
+    this.infowindow.close();
   }
 
   // Hide/display sidebar when button clicked through toggling display property
@@ -162,28 +178,51 @@ var ViewModel = function() {
     $('#sidebar').toggle();
   }
 
+  // Filter the list and markers based on the text inputted by the user into the input form
+  this.userInput = ko.observable('');
+  //http://knockoutjs.com/documentation/computedObservables.html
+  this.listFilter = ko.computed(function() {
+    //console.log(self.userInput()); - to check the textInput binding
+    var data = self.userInput().toLowerCase();
+
+    if (!data) {
+        return self.myLocs();
+        console.log(!data);
+    } else {
+//        self.myLocs().marker.setVisible(false);
+        return ko.utils.arrayFilter(self.myLocs(), function(myLoc) {
+          var title = myLoc.title.toLowerCase();
+          //myLoc.marker.setVisible(false);
+          return title.indexOf(data) !== -1;
+          return marker.visible(false);
+
+        });
+        console.log(self.myLocs());
+    }
+  });
+
   // Filter the list and markers based on the text inputted by the user into the input form upon button click
   // If user submitted empty, the Filter button will clear the filter and display all list items and markers ("else" statement)
-  this.filter = function() {
-    var data = document.getElementById('input').value; //used "AsT" to test
-    console.log(data);
-    for (i=0; i<self.myLocs().length; i++) {
-      //if the lookup value is not a part of the list item name, hide the list item and it's marker
-      if (!self.myLocs()[i].title.toLowerCase().includes(data.toLowerCase())) {
-        self.myLocs()[i].Disp = false;
-        //console.log(self.myLocs()[i]);
-        markers[i].setVisible(false);
-      } else { //otherwise display them
-        self.myLocs()[i].Disp = true;
-        //console.log(self.myLocs()[i]);
-        markers[i].setVisible(true);
-      }
-    }
+  // this.filter = function() {
+  //   var data = document.getElementById('input').value; //used "AsT" to test
+  //   console.log(data);
+  //   for (i=0; i<self.myLocs().length; i++) {
+  //     //if the lookup value is not a part of the list item name, hide the list item and it's marker
+  //     if (!self.myLocs()[i].title.toLowerCase().includes(data.toLowerCase())) {
+  //       self.myLocs()[i].Disp = false;
+  //       //console.log(self.myLocs()[i]);
+  //       markers[i].setVisible(false);
+  //     } else { //otherwise display them
+  //       self.myLocs()[i].Disp = true;
+  //       //console.log(self.myLocs()[i]);
+  //       markers[i].setVisible(true);
+  //     }
+  //   }
     // TO DO: find out why self.myLocs() is not updating the locations list
     // 1. it works as intended outside the filter function ---> so could it be scope problem?
     // 2. doesn't seem like there is a problem with the scope as filter was tied in self
     // 3. this.myLocs() just does not seem to update automatically (binding not working properly?)
-  }
+  //}
 };
 
 ko.applyBindings(new ViewModel());
