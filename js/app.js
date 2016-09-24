@@ -190,7 +190,7 @@ var ViewModel = function() {
     } else {
         return ko.utils.arrayFilter(self.myLocs(), function(myLoc) {
           var title = myLoc.title.toLowerCase();
-          var status = title.indexOf(data) !== -1; //returns "true" if the inputText is not a part of list item title 
+          var status = title.indexOf(data) !== -1; //returns "true" if the inputText is not a part of list item title
           myLoc.marker.setVisible(status);
           return title.indexOf(data) !== -1;
           //syncing markers visibility with the filtered observableArray
