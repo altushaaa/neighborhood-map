@@ -88,6 +88,11 @@ var LocModel = function(data) {
   this.infowindow = data.infowindow;
 };
 
+// Callback if the GoogleMap script loads
+function googleError() {
+  alert('GoogleMaps could not load. Please reload the page or check back later.');
+}
+
 function loadApp() {
 
   /*======View/Setting up GoogleMap======*/
@@ -136,7 +141,7 @@ function loadApp() {
         method: 'GET',
       }).done(function(result) {
         // Handle the error when NYTimes Article Search does not return a result by notifying the user in the infowindow
-        if (result.response.docs[0] == undefined) {
+        if (result.response.docs[0] === undefined) {
           apiStr = '<h3>' + locItem.title + '</h3>' + '<p> No NYTimes article could be loaded this time.</p>';
         } else {
           apiStr = '<h3>' + locItem.title + '</h3>' + '<p>' + result.response.docs[0].lead_paragraph + '</p>' +
@@ -145,6 +150,7 @@ function loadApp() {
         }
         infowindow.setContent(apiStr);
       },this).fail(function(err) {
+        alert('The NYT API has failed. Please reload the page or try again later.');
         throw err;
       });
 
@@ -153,11 +159,9 @@ function loadApp() {
         infowindow.open(map,marker);
         marker.setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png');
       });
-
-      // Hide the infowindow and return marker to normal when user mouses-out
+      // Return marker to normal when user mouses-out
       marker.addListener('mouseout', function() {
-          infowindow.close();
-          marker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png');
+        marker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png');
       });
     });
     // console.log(self.myLocs());- to check observableArray
@@ -165,15 +169,17 @@ function loadApp() {
     // Open infowindow when the list item is clicked and close when user moves the cursor away
     this.dispInfo = function() {
       this.infowindow.open(map,this.marker);
-    }
-    this.hideInfo = function() {
-      this.infowindow.close();
-    }
+      this.marker.setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png');
+    };
+
+    this.retMarker = function () {
+      this.marker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png');
+    };
 
     // Hide/display sidebar when button clicked through toggling display property
     this.sidebar = function(){
       $('#sidebar-wrapper').toggle();
-    }
+    };
 
     // Filter the list and markers based on the text inputted by the user into the input form
     this.userInput = ko.observable('');
@@ -183,7 +189,11 @@ function loadApp() {
       var data = self.userInput().toLowerCase();
 
       if (!data) {
-          return self.myLocs();
+        // Set all markers and list items visible when textInput is emptied
+        return ko.utils.arrayFilter(self.myLocs(), function(myLoc) {
+          myLoc.marker.setVisible(true);
+          return true;
+        });
       } else {
           return ko.utils.arrayFilter(self.myLocs(), function(myLoc) {
             var title = myLoc.title.toLowerCase();
